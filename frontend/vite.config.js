@@ -12,5 +12,8 @@ export default defineConfig({
         secure: false
       }
     }
+  },
+  build: {
+    outDir: 'dist' // Output directory for the build
   }
 });
