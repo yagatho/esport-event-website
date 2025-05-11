@@ -15,11 +15,17 @@ app.use(cors({
     methods: ['GET', 'POST']
 }));
 
-// Static files serving
+// Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
+// logging middleware
+app.use((req, res, next) => {
+    console.log('Żądanie:', req.method, req.url);
+    next();
+});
+
 // SPA routing
-app.get('/{*any}', (req, res) => {
+app.get('/*splat', (_req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
