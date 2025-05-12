@@ -41,10 +41,10 @@ export default function Menu() {
     }, [open]);
 
     return (<nav
-        className="bg-[#1E1E1E] w-full h-20 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
+        className="bg-[#1E1E1E] w-full h-25 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
         <div className="flex items-center justify-between w-full">
             <a href="/">
-                <img src={Logo} alt="Logo" className="h-20"/>
+                <img src={Logo} alt="Logo" className="h-24 object-cover" />
             </a>
 
             {/* Desktop menu */}
