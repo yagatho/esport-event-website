@@ -41,10 +41,10 @@ export default function Menu() {
     }, [open]);
 
     return (<nav
-        className="bg-[#1E1E1E] w-full h-20 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
+        className="bg-[#1E1E1E] w-full h-25 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
         <div className="flex items-center justify-between w-full">
             <a href="/">
-                <img src={Logo} alt="Logo" className="h-20"/>
+                <img src={Logo} alt="Logo" className="h-24 object-cover" />
             </a>
 
             {/* Desktop menu */}
@@ -69,7 +69,7 @@ export default function Menu() {
             </button>
 
             {/* Dropdown mobile menu */}
-            {visible && (<div ref={menuRef} className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[95%] bg-[#232323] rounded shadow-lg flex flex-col items-center md:hidden z-50 divide-y divide-[#2A2A2A] ${isClosing ? 'animate-[slideUp_0.3s_ease-in]' : 'animate-[slideDown_0.3s_ease-out]'}`}>
+            {visible && (<div ref={menuRef} className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[95%] bg-[#232323] border-[#2A2A2A] border-3 rounded shadow-lg flex flex-col items-center md:hidden z-50 divide-y divide-[#2A2A2A] ${isClosing ? 'animate-[slideUp_0.3s_ease-in]' : 'animate-[slideDown_0.3s_ease-out]'}`}>
                 <a href="/about" className="w-[80%] px-4 py-3 mt-2 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>O nas</a>
                 <a href="/games" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
                 <a href="/faq" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
