@@ -10,7 +10,7 @@ export default function RegisterPage() {
 
     return (
         <form action="/api/register" method="POST"
-              className="w-full max-w-4xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg shadow-lg mt-8 mb-8 md:border-[#2A2A2A] md:border-2">
+              className="w-full max-w-4xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg shadow-lg mt-8 mb-8 md:border-[#2A2A2A] md:border-2 border-t-2 border-t-[#2A2A2A] border-b-2 border-b-[#2A2A2A]">
             <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 text-center">Zapisz się na jeden z naszych turniejów
                 już dziś!</h2>
 
