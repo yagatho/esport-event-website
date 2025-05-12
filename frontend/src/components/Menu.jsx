@@ -43,17 +43,17 @@ export default function Menu() {
     return (<nav
         className="bg-[#1E1E1E] w-full h-20 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
         <div className="flex items-center justify-between w-full">
-            <a href="#home">
+            <a href="/">
                 <img src={Logo} alt="Logo" className="h-20"/>
             </a>
 
             {/* Desktop menu */}
             <div className="hidden md:flex">
-                <a href="#home" className="px-9 py-3 text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">O nas</a>
-                <a href="#home" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">Gry</a>
-                <a href="#home" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">FAQ</a>
-                <a href="#home" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-colors duration-200">Kontakt</a>
-                <a href="#signup" className="ml-7 bg-[#FF5555] hover:bg-[#30E9EE] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide">ZAPISZ SIĘ</a>
+                <a href="/about" className="px-9 py-3 text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">O nas</a>
+                <a href="/games" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">Gry</a>
+                <a href="/faq" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">FAQ</a>
+                <a href="/contact" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-colors duration-200">Kontakt</a>
+                <a href="/register" className="ml-7 bg-[#FF5555] hover:bg-[#30E9EE] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide">ZAPISZ SIĘ</a>
             </div>
 
             {/* Hamburger */}
@@ -70,11 +70,11 @@ export default function Menu() {
 
             {/* Dropdown mobile menu */}
             {visible && (<div ref={menuRef} className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[95%] bg-[#232323] rounded shadow-lg flex flex-col items-center md:hidden z-50 divide-y divide-[#2A2A2A] ${isClosing ? 'animate-[slideUp_0.3s_ease-in]' : 'animate-[slideDown_0.3s_ease-out]'}`}>
-                <a href="#home" className="w-[80%] px-4 py-3 mt-2 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>O nas</a>
-                <a href="#about" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
-                <a href="#services" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
-                <a href="#contact" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Kontakt</a>
-                <a href="#signup" className="bg-[#FF5555]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
+                <a href="/about" className="w-[80%] px-4 py-3 mt-2 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>O nas</a>
+                <a href="/games" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
+                <a href="/faq" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
+                <a href="/contact" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Kontakt</a>
+                <a href="/register" className="bg-[#FF5555]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
             </div>)}
         </div>
     </nav>);

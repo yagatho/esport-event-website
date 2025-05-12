@@ -10,7 +10,6 @@ Here're some of the project's best features:
 
 *   📝 Player Registration System
 *   🧾 Rules and Info Pages
-*   🔒 Authentication & Admin Access
 
 <h2>🛠️ Installation Steps:</h2>
 
@@ -31,8 +30,8 @@ Technologies used in the project:
 *   DB(TODO)
 
 <h2>🙍‍♂️ Authors:</h2>
-* Szymon Grucela
-* Wiktor Rzepka
+*   Szymon Grucela
+*   Wiktor Rzepka
 
 <h2>🛡️ License:</h2>
 
