@@ -43,9 +43,18 @@ export default function Menu() {
     return (<nav
         className="bg-[#1E1E1E] w-full h-25 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
         <div className="flex items-center justify-between w-full">
-            <a href="/">
-                <img src={Logo} alt="Logo" className="h-24 object-cover" />
-            </a>
+        
+<a
+  href="/"
+  className="inline-flex items-center transform transition duration-300 ease-out hover:scale-115 hover:rotate-15"
+>
+  <img src={Logo} alt="Logo" className="h-24 object-cover" />
+  <span className="ml-3 text-[#ecf0f1] text-lg font-semibold transition-colors duration-300 hover:text-[#c0392b]">
+    HOME
+  </span>
+</a>
+
+
 
             {/* Desktop menu */}
             <div className="hidden md:flex">
@@ -53,7 +62,7 @@ export default function Menu() {
                 <a href="/games" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">Gry</a>
                 <a href="/faq" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">FAQ</a>
                 <a href="/contact" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-colors duration-200">Kontakt</a>
-                <a href="/register" className="ml-7 bg-[#FF5555] hover:bg-[#30E9EE] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide">ZAPISZ SIĘ</a>
+                <a href="/register" className="ml-7 bg-[#c0392b] hover:bg-[#2980b9] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide">ZAPISZ SIĘ</a>
             </div>
 
             {/* Hamburger */}
@@ -74,7 +83,7 @@ export default function Menu() {
                 <a href="/games" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
                 <a href="/faq" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
                 <a href="/contact" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Kontakt</a>
-                <a href="/register" className="bg-[#FF5555]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
+                <a href="/register" className="bg-[#c0392b]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
             </div>)}
         </div>
     </nav>);
