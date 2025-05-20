@@ -108,7 +108,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 place-items-center">
           {/* Partner 1: Orzeł Power */}
-          <div className="bg-[#1e1e1e] rounded-xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 max-w-md">
+          <div className="bg-[#1e1e1e] rounded-xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 max-w-md h-full">
             <img
               src={orzel}
               alt="Orzeł Power"
@@ -129,7 +129,7 @@ export default function HomePage() {
           </div>
 
           {/* Partner 2: HyperGear */}
-          <div className="bg-[#1e1e1e] rounded-xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 max-w-md">
+          <div className="bg-[#1e1e1e] rounded-xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 max-w-md h-full">
             <img
               src={hypergear}
               alt="HyperGear"
