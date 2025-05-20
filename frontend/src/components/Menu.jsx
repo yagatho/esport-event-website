@@ -43,16 +43,16 @@ export default function Menu() {
     return (<nav
         className="bg-[#1E1E1E] w-full h-25 flex items-center justify-between px-6 md:px-22 border-b-2 border-b-[#2A2A2A] relative">
         <div className="flex items-center justify-between w-full">
-        
-<a
-  href="/"
-  className="inline-flex items-center transform transition duration-300 ease-out hover:scale-115 hover:rotate-15"
->
-  <img src={Logo} alt="Logo" className="h-24 object-cover" />
-  <span className="ml-3 text-[#ecf0f1] text-lg font-semibold transition-colors duration-300 hover:text-[#c0392b]">
-    HOME
-  </span>
-</a>
+            {/* Logo */}
+            <a
+              href="/"
+              className="inline-flex items-center transform transition duration-300 ease-out hover:scale-115 hover:rotate-15"
+            >
+              <img src={Logo} alt="Logo" className="h-24 object-cover" />
+              <span className="ml-3 text-[#ecf0f1] text-lg font-semibold transition-colors duration-300 hover:text-[#c0392b]">
+                HOME
+              </span>
+            </a>
 
 
 
