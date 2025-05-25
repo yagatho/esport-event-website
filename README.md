@@ -16,7 +16,7 @@ Here're some of the project's best features:
 
 ```javascript
 // Clone the repository
-https://github.com/yagatho/esport-event-website.githttps://github.com/yagatho/esport-event-website.git
+git clone https://github.com/yagatho/esport-event-website.git
 
 // Install frontend dependencies and build the distribution
 cd frontend && npm install && npm run build
@@ -40,6 +40,7 @@ Technologies used in the project:
 *   PostgreSQL
 
 <h2>🙍‍♂️ Authors:</h2>
+
 * Szymon Grucela - [yagatho](https://github.com/yagatho)
 * Wiktor Rzepka - [wrzepka](https://github.com/wrzepka)
 
