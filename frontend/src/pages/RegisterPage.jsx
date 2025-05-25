@@ -5,12 +5,19 @@ export default function RegisterPage() {
     const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
-
     const [errorMessage, setErrorMessage] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({
+        email: '',
+        phone: '',
+    });
+
+    // Email regex: Basic validation for email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Phone regex: Matches formats like "123 456 789", "+48 123 456 789", or "123456789"
+    const phoneRegex = /^(?:\+48\s?)?\d{3}\s?\d{3}\s?\d{3}$/;
 
     const handleGameChange = (e) => {
         setSelectedGame(e.target.value);
-        // Clear game-specific data when changing games
         const newFormData = { ...formData };
         Object.keys(newFormData).forEach(key => {
             if (key.includes('-')) {
@@ -21,10 +28,24 @@ export default function RegisterPage() {
     };
 
     const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [name]: value,
         }));
+
+        // Real-time validation
+        if (name === 'email') {
+            setFieldErrors(prev => ({
+                ...prev,
+                email: emailRegex.test(value) ? '' : 'Podaj poprawny adres email',
+            }));
+        } else if (name === 'phone') {
+            setFieldErrors(prev => ({
+                ...prev,
+                phone: phoneRegex.test(value) ? '' : 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)',
+            }));
+        }
     };
 
     const handleCheckboxChange = (e) => {
@@ -34,12 +55,14 @@ export default function RegisterPage() {
         }));
     };
 
-    // Validation function to check if all required fields are filled
+    // Validation function to check if all required fields are filled and valid
     const isFormValid = () => {
         // Basic fields validation
         const hasBasicFields = formData.name &&
             formData.email &&
+            emailRegex.test(formData.email) &&
             formData.phone &&
+            phoneRegex.test(formData.phone) &&
             selectedGame &&
             formData.terms;
 
@@ -82,6 +105,18 @@ export default function RegisterPage() {
         e.preventDefault();
 
         if (!isFormValid()) {
+            if (!emailRegex.test(formData.email)) {
+                setFieldErrors(prev => ({
+                    ...prev,
+                    email: 'Podaj poprawny adres email',
+                }));
+            }
+            if (!phoneRegex.test(formData.phone)) {
+                setFieldErrors(prev => ({
+                    ...prev,
+                    phone: 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)',
+                }));
+            }
             return;
         }
 
@@ -90,7 +125,6 @@ export default function RegisterPage() {
         setErrorMessage('');
 
         try {
-            // JSON building for the API
             let teamName = '';
             let members = [];
 
@@ -150,7 +184,6 @@ export default function RegisterPage() {
 
             console.log('Sending registration data:', payload);
 
-            // Send registration data to the server
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
@@ -167,10 +200,9 @@ export default function RegisterPage() {
 
             console.log('Registration successful:', result);
             setSubmitStatus('success');
-
-            // Reset form after successful submission
             setFormData({});
             setSelectedGame('');
+            setFieldErrors({ email: '', phone: '' });
 
         } catch (error) {
             setSubmitStatus('error');
@@ -222,13 +254,12 @@ export default function RegisterPage() {
                 <div className="mb-6 p-4 bg-red-800/30 border border-red-600 rounded-lg text-red-200 flex items-center gap-3">
                     <div>
                         <strong>Wystąpił błąd podczas rejestracji</strong>
-                        <p className="text-sm mt-1">Spróbuj ponownie lub skontaktuj się z organizatorami.</p>
+                        <p className="text-sm mt-1">{errorMessage || 'Spróbuj ponownie lub skontaktuj się z organizatorami.'}</p>
                     </div>
                 </div>
             )}
 
             <div className="flex flex-col lg:flex-row lg:gap-8 h-full">
-                {/* Basic information */}
                 <div className="lg:w-1/2 mb-8 lg:mb-0 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
@@ -264,11 +295,14 @@ export default function RegisterPage() {
                                     name="email"
                                     value={formData['email'] || ''}
                                     onChange={handleInputChange}
-                                    className="w-full p-3 bg-[#1E1E1E] border border-[#2A2A2A] rounded-lg text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#c0392b] focus:border-transparent transition-all duration-200 hover:border-[#3A3A3A]"
+                                    className={`w-full p-3 bg-[#1E1E1E] border ${fieldErrors.email ? 'border-[#FF5555]' : 'border-[#2A2A2A]'} rounded-lg text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#c0392b] focus:border-transparent transition-all duration-200 hover:border-[#3A3A3A]`}
                                     placeholder="twoj@email.com"
                                     required
                                     disabled={isSubmitting}
                                 />
+                                {fieldErrors.email && (
+                                    <p className="text-[#FF5555] text-sm mt-1">{fieldErrors.email}</p>
+                                )}
                             </div>
 
                             <div>
@@ -281,11 +315,14 @@ export default function RegisterPage() {
                                     name="phone"
                                     value={formData['phone'] || ''}
                                     onChange={handleInputChange}
-                                    className="w-full p-3 bg-[#1E1E1E] border border-[#2A2A2A] rounded-lg text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#c0392b] focus:border-transparent transition-all duration-200 hover:border-[#3A3A3A]"
+                                    className={`w-full p-3 bg-[#1E1E1E] border ${fieldErrors.phone ? 'border-[#FF5555]' : 'border-[#2A2A2A]'} rounded-lg text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#c0392b] focus:border-transparent transition-all duration-200 hover:border-[#3A3A3A]`}
                                     placeholder="123 456 789"
                                     required
                                     disabled={isSubmitting}
                                 />
+                                {fieldErrors.phone && (
+                                    <p className="text-[#FF5555] text-sm mt-1">{fieldErrors.phone}</p>
+                                )}
                             </div>
 
                             <div>
@@ -330,7 +367,7 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-                {/* Extended information */}
+                {/* Extended information (unchanged) */}
                 <div className="lg:w-1/2 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
@@ -362,7 +399,6 @@ export default function RegisterPage() {
                                     </p>
                                 </div>
 
-                                {/* Mortal Kombat - individual */}
                                 {selectedGame === '5' && (
                                     <div>
                                         <label htmlFor="mk-nickname" className="block text-[#E0E0E0] mb-2 font-medium">
@@ -382,7 +418,6 @@ export default function RegisterPage() {
                                     </div>
                                 )}
 
-                                {/* Team games */}
                                 {['1', '2', '3', '4'].includes(selectedGame) && (
                                     <>
                                         <div>
@@ -433,7 +468,6 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            {/* Submit button */}
             <div className="mt-8 pt-6 border-t border-[#2A2A2A] flex flex-col items-center">
                 <button
                     type="submit"
@@ -453,15 +487,9 @@ export default function RegisterPage() {
                     )}
                 </button>
 
-                {!isFormValid() && selectedGame && (
+                {!isFormValid() && (
                     <p className="text-[#FF5555] text-sm text-center mt-3">
-                        Wypełnij wszystkie wymagane pola aby się zarejestrować
-                    </p>
-                )}
-
-                {!selectedGame && (
-                    <p className="text-[#666] text-sm text-center mt-3">
-                        Wybierz grę, aby móc się zarejestrować
+                        Wypełnij wszystkie wymagane pola poprawnie, aby się zarejestrować
                     </p>
                 )}
             </div>
