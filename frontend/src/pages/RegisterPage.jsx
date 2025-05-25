@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 export default function RegisterPage() {
     const [selectedGame, setSelectedGame] = useState('');
@@ -18,7 +18,7 @@ export default function RegisterPage() {
 
     const handleGameChange = (e) => {
         setSelectedGame(e.target.value);
-        const newFormData = { ...formData };
+        const newFormData = {...formData};
         Object.keys(newFormData).forEach(key => {
             if (key.includes('-')) {
                 delete newFormData[key];
@@ -28,7 +28,7 @@ export default function RegisterPage() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value,
@@ -202,7 +202,7 @@ export default function RegisterPage() {
             setSubmitStatus('success');
             setFormData({});
             setSelectedGame('');
-            setFieldErrors({ email: '', phone: '' });
+            setFieldErrors({email: '', phone: ''});
 
         } catch (error) {
             setSubmitStatus('error');
@@ -236,14 +236,16 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="w-full max-w-6xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg shadow-2xl mt-8 mb-8 md:border-[#2A2A2A] md:border-2 border-t-2 border-t-[#2A2A2A] border-b-2 border-b-[#2A2A2A]">
+        <div
+            className="w-full max-w-6xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg mt-8 mb-8 md:border-[#2A2A2A] md:border-2 border-t-2 border-t-[#2A2A2A] border-b-2 border-b-[#2A2A2A]">
             <h2 className="text-4xl font-bold text-[#E0E0E0] mb-4 text-center">REJESTRACJA NA TURNIEJ</h2>
             <p className="text-[#95a5a6] text-lg md:text-xl font-light mb-8 text-center max-w-3xl mx-auto">
                 Zapisz się na jeden z naszych turniejów już dziś! Wypełnij formularz poniżej i dołącz do rywalizacji.
             </p>
 
             {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-800/30 border border-green-600 rounded-lg text-green-200 flex items-center gap-3">
+                <div
+                    className="mb-6 p-4 bg-green-800/30 border border-green-600 rounded-lg text-green-200 flex items-center gap-3">
                     <div>
                         <strong>Rejestracja przebiegła pomyślnie!</strong>
                     </div>
@@ -251,7 +253,8 @@ export default function RegisterPage() {
             )}
 
             {submitStatus === 'error' && (
-                <div className="mb-6 p-4 bg-red-800/30 border border-red-600 rounded-lg text-red-200 flex items-center gap-3">
+                <div
+                    className="mb-6 p-4 bg-red-800/30 border border-red-600 rounded-lg text-red-200 flex items-center gap-3">
                     <div>
                         <strong>Wystąpił błąd podczas rejestracji</strong>
                         <p className="text-sm mt-1">{errorMessage || 'Spróbuj ponownie lub skontaktuj się z organizatorami.'}</p>
@@ -263,7 +266,9 @@ export default function RegisterPage() {
                 <div className="lg:w-1/2 mb-8 lg:mb-0 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
-                            <div className="w-8 h-8 bg-[#FF5555] rounded-lg flex items-center justify-center text-white font-bold">1</div>
+                            <div
+                                className="w-8 h-8 bg-[#FF5555] rounded-lg flex items-center justify-center text-white font-bold">1
+                            </div>
                             Dane podstawowe
                         </h3>
 
@@ -359,7 +364,8 @@ export default function RegisterPage() {
                                         disabled={isSubmitting}
                                     />
                                     <span className="text-sm group-hover:text-[#30E9EE] transition-colors">
-                                        Akceptuję <span className="text-[#30E9EE] underline">regulamin</span> i wyrażam zgodę na przetwarzanie danych osobowych <span className="text-[#FF5555]">*</span>
+                                        Akceptuję <span className="text-[#30E9EE] underline">regulamin</span> i wyrażam zgodę na przetwarzanie danych osobowych <span
+                                        className="text-[#FF5555]">*</span>
                                     </span>
                                 </label>
                             </div>
@@ -371,7 +377,9 @@ export default function RegisterPage() {
                 <div className="lg:w-1/2 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
-                            <div className="w-8 h-8 bg-[#30E9EE] rounded-lg flex items-center justify-center text-black font-bold">2</div>
+                            <div
+                                className="w-8 h-8 bg-[#30E9EE] rounded-lg flex items-center justify-center text-black font-bold">2
+                            </div>
                             Dane drużyny
                         </h3>
 
@@ -379,7 +387,8 @@ export default function RegisterPage() {
                             <div className="h-64 flex items-center justify-center">
                                 <div className="text-center">
                                     <p className="text-[#A0A0A0] text-lg">Wybierz grę, aby wyświetlić pola drużyny</p>
-                                    <p className="text-[#666] text-sm mt-2">Każda gra ma różne wymagania dotyczące składu</p>
+                                    <p className="text-[#666] text-sm mt-2">Każda gra ma różne wymagania dotyczące
+                                        składu</p>
                                 </div>
                             </div>
                         )}
@@ -389,7 +398,8 @@ export default function RegisterPage() {
                                 <div className="bg-[#2A2A2A]/30 rounded-lg p-4 border border-[#30E9EE]/20">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="w-3 h-3 bg-[#30E9EE] rounded-full"></div>
-                                        <span className="text-[#30E9EE] font-semibold">{getGameName(selectedGame)}</span>
+                                        <span
+                                            className="text-[#30E9EE] font-semibold">{getGameName(selectedGame)}</span>
                                     </div>
                                     <p className="text-[#A0A0A0] text-sm">
                                         {getTeamSize(selectedGame) === 1
@@ -441,9 +451,10 @@ export default function RegisterPage() {
                                                 Nickname'y członków zespołu <span className="text-[#FF5555]">*</span>
                                             </label>
                                             <div className="space-y-3">
-                                                {Array.from({ length: getTeamSize(selectedGame) }, (_, i) => (
+                                                {Array.from({length: getTeamSize(selectedGame)}, (_, i) => (
                                                     <div key={i} className="relative">
-                                                        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-[#30E9EE] rounded-full flex items-center justify-center text-black text-xs font-bold">
+                                                        <div
+                                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-[#30E9EE] rounded-full flex items-center justify-center text-black text-xs font-bold">
                                                             {i + 1}
                                                         </div>
                                                         <input
@@ -477,7 +488,8 @@ export default function RegisterPage() {
                 >
                     {isSubmitting ? (
                         <>
-                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                            <div
+                                className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                             REJESTROWANIE...
                         </>
                     ) : (
@@ -496,7 +508,13 @@ export default function RegisterPage() {
 
             <div className="mt-6 text-center">
                 <p className="text-[#95a5a6] text-sm">
-                    Masz pytania? <span className="text-[#30E9EE] underline cursor-pointer hover:text-[#FF5555] transition-colors">Skontaktuj się z nami</span>
+                    Masz pytania?{' '}
+                    <a
+                        href="/contact"
+                        className="text-[#30E9EE] underline cursor-pointer hover:text-[#FF5555] transition-colors"
+                    >
+                        Skontaktuj się z nami
+                    </a>
                 </p>
             </div>
         </div>
