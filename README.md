@@ -10,10 +10,20 @@ Here're some of the project's best features:
 
 *   📝 Player Registration System
 *   🧾 Rules and Info Pages
+*   📧 User Contact System
 
 <h2>🛠️ Installation Steps:</h2>
 
-<p>1. TODO</p>
+```javascript
+// Clone the repository
+https://github.com/yagatho/esport-event-website.githttps://github.com/yagatho/esport-event-website.git
+
+// Install frontend dependencies and build the distribution
+cd frontend && npm install && npm run build
+
+// Install backend dependencies and start the server
+cd backend && npm install && node server.js
+```
 
 
 
@@ -27,12 +37,13 @@ Technologies used in the project:
 *   Fetch API
 *   Node.js
 *   Express
-*   DB(TODO)
+*   PostgreSQL
 
 <h2>🙍‍♂️ Authors:</h2>
-*   Szymon Grucela
-*   Wiktor Rzepka
+[![‎](https://img.shields.io/badge/yagatho-100000?style=for-the-badge&logo=GitHub&logoColor=42B328&labelColor=FFFFFF&color=212121)](https://github.com/yagatho)
+
+[![‎](https://img.shields.io/badge/Wrzepka-100000?style=for-the-badge&logo=GitHub&logoColor=458AD4&labelColor=FFFFFF&color=212121)](https://github.com/wrzepka)
 
 <h2>🛡️ License:</h2>
 
-This project is licensed under the TODO
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
