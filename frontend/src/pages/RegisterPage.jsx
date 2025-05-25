@@ -182,8 +182,6 @@ export default function RegisterPage() {
                 members,
             };
 
-            console.log('Sending registration data:', payload);
-
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
@@ -198,7 +196,6 @@ export default function RegisterPage() {
                 throw new Error(result.error || 'Wystąpił błąd podczas rejestracji');
             }
 
-            console.log('Registration successful:', result);
             setSubmitStatus('success');
             setFormData({});
             setSelectedGame('');
@@ -207,7 +204,6 @@ export default function RegisterPage() {
         } catch (error) {
             setSubmitStatus('error');
             setErrorMessage(error.message);
-            console.error('Registration error:', error);
         } finally {
             setIsSubmitting(false);
         }
@@ -506,7 +502,7 @@ export default function RegisterPage() {
                 )}
             </div>
 
-            <div className="mt-6 text-center">
+            <div className="mt-8 pt-6 border-t border-[#2A2A2A] text-center">
                 <p className="text-[#95a5a6] text-sm">
                     Masz pytania?{' '}
                     <a
