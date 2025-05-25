@@ -40,9 +40,8 @@ Technologies used in the project:
 *   PostgreSQL
 
 <h2>🙍‍♂️ Authors:</h2>
-[![‎](https://img.shields.io/badge/yagatho-100000?style=for-the-badge&logo=GitHub&logoColor=42B328&labelColor=FFFFFF&color=212121)](https://github.com/yagatho)
-
-[![‎](https://img.shields.io/badge/Wrzepka-100000?style=for-the-badge&logo=GitHub&logoColor=458AD4&labelColor=FFFFFF&color=212121)](https://github.com/wrzepka)
+* Szymon Grucela - [yagatho](https://github.com/yagatho)
+* Wiktor Rzepka - [wrzepka](https://github.com/wrzepka)
 
 <h2>🛡️ License:</h2>
 
