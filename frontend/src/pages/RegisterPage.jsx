@@ -7,8 +7,11 @@ export default function RegisterPage() {
     const [submitStatus, setSubmitStatus] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState({
+        name: '',
         email: '',
         phone: '',
+        teamName: '',
+        members: '',
     });
 
     // Email regex: Basic validation for email format
@@ -25,6 +28,11 @@ export default function RegisterPage() {
             }
         });
         setFormData(newFormData);
+        setFieldErrors(prev => ({
+            ...prev,
+            teamName: '',
+            members: ''
+        }));
     };
 
     const handleInputChange = (e) => {
@@ -35,17 +43,48 @@ export default function RegisterPage() {
         }));
 
         // Real-time validation
-        if (name === 'email') {
-            setFieldErrors(prev => ({
-                ...prev,
-                email: emailRegex.test(value) ? '' : 'Podaj poprawny adres email',
-            }));
-        } else if (name === 'phone') {
-            setFieldErrors(prev => ({
-                ...prev,
-                phone: phoneRegex.test(value) ? '' : 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)',
-            }));
+        validateField(name, value);
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+
+        switch (name) {
+            case 'name':
+                if (!value || value.trim().length < 2) {
+                    error = 'Imię i nazwisko musi mieć co najmniej 2 znaki';
+                }
+                break;
+            case 'email':
+                if (!emailRegex.test(value)) {
+                    error = 'Podaj poprawny adres email';
+                }
+                break;
+            case 'phone':
+                if (!phoneRegex.test(value)) {
+                    error = 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)';
+                }
+                break;
+            default:
+                // Walidacja dla nazw drużyn i członków
+                if (name.includes('-team') && (!value || value.trim().length < 3)) {
+                    error = 'Nazwa drużyny musi mieć co najmniej 3 znaki';
+                    name = 'teamName';
+                } else if (name.includes('-member') || name === 'mk-nickname') {
+                    if (!value || value.trim().length < 2) {
+                        error = 'Imię/nick członka drużyny musi mieć co najmniej 2 znaki';
+                        name = 'members';
+                    }
+                }
+                break;
         }
+
+        setFieldErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
+
+        return !error;
     };
 
     const handleCheckboxChange = (e) => {
@@ -55,10 +94,60 @@ export default function RegisterPage() {
         }));
     };
 
+    const validateAllFields = () => {
+        const errors = {};
+
+        // Walidacja podstawowych pól
+        if (!formData.name || formData.name.trim().length < 2) {
+            errors.name = 'Imię i nazwisko musi mieć co najmniej 2 znaki';
+        }
+
+        if (!formData.email || !emailRegex.test(formData.email)) {
+            errors.email = 'Podaj poprawny adres email';
+        }
+
+        if (!formData.phone || !phoneRegex.test(formData.phone)) {
+            errors.phone = 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)';
+        }
+
+        // Walidacja dla nazwy drużyny i członków w zależności od wybranej gry
+        if (selectedGame) {
+            const prefix = selectedGame === '1' ? 'cs' :
+                selectedGame === '2' ? 'lol' :
+                    selectedGame === '3' ? 'rl' :
+                        selectedGame === '4' ? 'ft' : 'mk';
+
+            if (selectedGame !== '5') {
+                const teamFieldName = `${prefix}-team`;
+                if (!formData[teamFieldName] || formData[teamFieldName].trim().length < 3) {
+                    errors.teamName = 'Nazwa drużyny musi mieć co najmniej 3 znaki';
+                }
+
+                const teamSize = getTeamSize(selectedGame);
+                for (let i = 1; i <= teamSize; i++) {
+                    const memberField = `${prefix}-member-${i}`;
+                    if (!formData[memberField] || formData[memberField].trim().length < 2) {
+                        errors.members = 'Imię/nick każdego członka drużyny musi mieć co najmniej 2 znaki';
+                        break;
+                    }
+                }
+            } else {
+                // Mortal Kombat
+                if (!formData['mk-nickname'] || formData['mk-nickname'].trim().length < 2) {
+                    errors.teamName = 'Twój nickname musi mieć co najmniej 2 znaki';
+                }
+            }
+        }
+
+        setFieldErrors({...errors});
+        return Object.keys(errors).length === 0;
+    };
+
     // Validation function to check if all required fields are filled and valid
     const isFormValid = () => {
         // Basic fields validation
         const hasBasicFields = formData.name &&
+            formData.name.trim().length >= 2 &&
             formData.email &&
             emailRegex.test(formData.email) &&
             formData.phone &&
@@ -72,30 +161,50 @@ export default function RegisterPage() {
         switch (selectedGame) {
             case '1': // Counter-Strike 2
                 return formData['cs-team'] &&
+                    formData['cs-team'].trim().length >= 3 &&
                     formData['cs-member-1'] &&
+                    formData['cs-member-1'].trim().length >= 2 &&
                     formData['cs-member-2'] &&
+                    formData['cs-member-2'].trim().length >= 2 &&
                     formData['cs-member-3'] &&
+                    formData['cs-member-3'].trim().length >= 2 &&
                     formData['cs-member-4'] &&
-                    formData['cs-member-5'];
+                    formData['cs-member-4'].trim().length >= 2 &&
+                    formData['cs-member-5'] &&
+                    formData['cs-member-5'].trim().length >= 2;
             case '2': // League of Legends
                 return formData['lol-team'] &&
+                    formData['lol-team'].trim().length >= 3 &&
                     formData['lol-member-1'] &&
+                    formData['lol-member-1'].trim().length >= 2 &&
                     formData['lol-member-2'] &&
+                    formData['lol-member-2'].trim().length >= 2 &&
                     formData['lol-member-3'] &&
+                    formData['lol-member-3'].trim().length >= 2 &&
                     formData['lol-member-4'] &&
-                    formData['lol-member-5'];
+                    formData['lol-member-4'].trim().length >= 2 &&
+                    formData['lol-member-5'] &&
+                    formData['lol-member-5'].trim().length >= 2;
             case '3': // Rocket League
                 return formData['rl-team'] &&
+                    formData['rl-team'].trim().length >= 3 &&
                     formData['rl-member-1'] &&
+                    formData['rl-member-1'].trim().length >= 2 &&
                     formData['rl-member-2'] &&
-                    formData['rl-member-3'];
+                    formData['rl-member-2'].trim().length >= 2 &&
+                    formData['rl-member-3'] &&
+                    formData['rl-member-3'].trim().length >= 2;
             case '4': // Fortnite
                 return formData['ft-team'] &&
+                    formData['ft-team'].trim().length >= 3 &&
                     formData['ft-member-1'] &&
+                    formData['ft-member-1'].trim().length >= 2 &&
                     formData['ft-member-2'] &&
-                    formData['ft-member-3'];
+                    formData['ft-member-2'].trim().length >= 2 &&
+                    formData['ft-member-3'] &&
+                    formData['ft-member-3'].trim().length >= 2;
             case '5': // Mortal Kombat
-                return formData['mk-nickname'];
+                return formData['mk-nickname'] && formData['mk-nickname'].trim().length >= 2;
             default:
                 return false;
         }
@@ -104,19 +213,7 @@ export default function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!isFormValid()) {
-            if (!emailRegex.test(formData.email)) {
-                setFieldErrors(prev => ({
-                    ...prev,
-                    email: 'Podaj poprawny adres email',
-                }));
-            }
-            if (!phoneRegex.test(formData.phone)) {
-                setFieldErrors(prev => ({
-                    ...prev,
-                    phone: 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)',
-                }));
-            }
+        if (!validateAllFields()) {
             return;
         }
 
@@ -167,19 +264,27 @@ export default function RegisterPage() {
                     break;
                 case '5':
                     teamName = formData['mk-nickname'] || '';
-                    members = [];
+                    members = [
+                        formData['mk-nickname']
+                    ].filter(Boolean);
                     break;
                 default:
                     break;
             }
 
+            // Sprawdzenie czy liczba członków drużyny jest odpowiednia
+            const requiredPlayers = getTeamSize(selectedGame);
+            if (selectedGame !== '5' && members.length !== requiredPlayers) {
+                throw new Error(`Niepoprawna liczba członków drużyny. W tej grze wymagana jest liczba ${requiredPlayers}.`);
+            }
+
             const payload = {
-                teamName,
+                teamName: teamName.trim(),
                 gameId: parseInt(selectedGame),
-                leaderName: formData['name'],
-                leaderEmail: formData['email'],
-                leaderPhone: formData['phone'],
-                members,
+                leaderName: formData['name'].trim(),
+                leaderEmail: formData['email'].trim(),
+                leaderPhone: formData['phone'].trim(),
+                members: members.map(member => member.trim()),
             };
 
             const response = await fetch('/api/register', {
@@ -199,7 +304,7 @@ export default function RegisterPage() {
             setSubmitStatus('success');
             setFormData({});
             setSelectedGame('');
-            setFieldErrors({email: '', phone: ''});
+            setFieldErrors({name: '', email: '', phone: '', teamName: '', members: ''});
 
         } catch (error) {
             setSubmitStatus('error');

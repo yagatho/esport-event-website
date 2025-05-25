@@ -6,7 +6,6 @@ export default function HomePage() {
         email: '',
         subject: '',
         message: '',
-        terms: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
@@ -105,6 +104,8 @@ export default function HomePage() {
                 body: JSON.stringify(formData),
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
                 throw new Error(result.error || 'Wystąpił błąd podczas rejestracji');
             }
@@ -130,12 +131,12 @@ export default function HomePage() {
         <div
             className="w-full max-w-4xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg mt-8 mb-8 md:border-[#2A2A2A] md:border-2 border-t-2 border-t-[#2A2A2A] border-b-2 border-b-[#2A2A2A]"
         >
-            <h2 className="text-4xl font-bold text-[#E0E0E0] mb-6 text-center">KONTAKT</h2>
+            <h2 className="text-4xl font-bold text-[#E0E0E0] mb-4 text-center">KONTAKT</h2>
 
-            <p className="text-[#95a5a6] text-xl md:text-2xl font-light mb-10 max-w-4xl text-center">
+            <p className="text-[#95a5a6] text-lg md:text-xl font-light mb-8 max-w-3xl text-center">
                 Masz pytania dotyczące wydarzenia, partnerstwa lub uczestnictwa?
             </p>
-            <p className="text-[#95a5a6] text-xl md:text-2xl font-light mb-10 max-w-4xl text-center">
+            <p className="text-[#95a5a6] text-lg md:text-xl font-light mb-8 max-w-3xl text-center">
                 Skontaktuj się z nami za pomocą formularza poniżej.
             </p>
 
