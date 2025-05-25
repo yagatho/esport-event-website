@@ -1,17 +1,107 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 export default function RegisterPage() {
     const [selectedGame, setSelectedGame] = useState('');
+    const [formData, setFormData] = useState({});
 
-    // Game change handler
     const handleGameChange = (e) => {
         setSelectedGame(e.target.value);
     };
 
+    // Handle input changes for basic fields
+    const handleInputChange = (e) => {
+        setFormData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    // Submit handler
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Budujemy obiekt JSON do wysłania
+        let teamName = '';
+        let members = [];
+
+        switch (selectedGame) {
+            case '1':
+                teamName = formData['cs-team'] || '';
+                members = [
+                    formData['cs-member-1'],
+                    formData['cs-member-2'],
+                    formData['cs-member-3'],
+                    formData['cs-member-4'],
+                    formData['cs-member-5'],
+                ];
+                break;
+            case '2':
+                teamName = formData['lol-team'] || '';
+                members = [
+                    formData['lol-member-1'],
+                    formData['lol-member-2'],
+                    formData['lol-member-3'],
+                    formData['lol-member-4'],
+                    formData['lol-member-5'],
+                ];
+                break;
+            case '3':
+                teamName = formData['rl-team'] || '';
+                members = [
+                    formData['rl-member-1'],
+                    formData['rl-member-2'],
+                    formData['rl-member-3'],
+                ];
+                break;
+            case '4':
+                teamName = formData['ft-team'] || '';
+                members = [
+                    formData['ft-member-1'],
+                    formData['ft-member-2'],
+                    formData['ft-member-3'],
+                ];
+                break;
+            case '5':
+                teamName = formData['mk-nickname'] || '';
+                members = [];
+                break;
+            default:
+                break;
+        }
+
+        const payload = {
+            teamName,
+            gameId: selectedGame,
+            leaderName: formData['name'],
+            leaderEmail: formData['email'],
+            leaderPhone: formData['phone'],
+            members,
+        };
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert('Błąd: ' + (errorData.error || errorData.message || 'Nieznany błąd'));
+            } else {
+                alert('Rejestracja przebiegła pomyślnie!');
+            }
+        } catch (error) {
+            alert('Błąd sieci: ' + error.message);
+        }
+    };
+
     return (
-        <form action="/api/register" method="POST"
+        <form onSubmit={handleSubmit}
               className="w-full max-w-4xl mx-auto p-6 bg-[#232323] rounded-none md:rounded-lg shadow-lg mt-8 mb-8 md:border-[#2A2A2A] md:border-2 border-t-2 border-t-[#2A2A2A] border-b-2 border-b-[#2A2A2A]">
-            <h2 className="text-2xl font-bold text-[#E0E0E0] mb-6 text-center">Zapisz się na jeden z naszych turniejów
+            <h2 className="text-4xl font-bold text-[#E0E0E0] mb-6 text-center">Zapisz się na jeden z naszych turniejów
                 już dziś!</h2>
 
             <div className="flex flex-col md:flex-row md:space-x-6">
@@ -25,6 +115,8 @@ export default function RegisterPage() {
                             type="text"
                             id="name"
                             name="name"
+                            value={formData['name'] || ''}
+                            onChange={handleInputChange}
                             className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                             required
                         />
@@ -36,6 +128,8 @@ export default function RegisterPage() {
                             type="email"
                             id="email"
                             name="email"
+                            value={formData['email'] || ''}
+                            onChange={handleInputChange}
                             className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                             required
                         />
@@ -47,6 +141,8 @@ export default function RegisterPage() {
                             type="tel"
                             id="phone"
                             name="phone"
+                            value={formData['phone'] || ''}
+                            onChange={handleInputChange}
                             className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                         />
                     </div>
@@ -62,11 +158,11 @@ export default function RegisterPage() {
                             onChange={handleGameChange}
                         >
                             <option value="">Wybierz grę</option>
-                            <option value="game-cs2">Counter-Strike 2</option>
-                            <option value="game-lol">League of Legends</option>
-                            <option value="game-rl">Rocket League [3v3]</option>
-                            <option value="game-ft">Fortnite [3-osobowe składy]</option>
-                            <option value="game-mk1">Mortal Kombat I</option>
+                            <option value="1">Counter-Strike 2</option>
+                            <option value="2">League of Legends</option>
+                            <option value="3">Rocket League [3v3]</option>
+                            <option value="4">Fortnite [3-osobowe składy]</option>
+                            <option value="5">Mortal Kombat I</option>
                         </select>
                     </div>
 
@@ -97,14 +193,16 @@ export default function RegisterPage() {
                     )}
 
                     {/* CS2 specific fields */}
-                    {selectedGame === 'game-cs2' && (
+                    {selectedGame === '1' && (
                         <>
                             <div className="mb-4">
                                 <label htmlFor="team" className="block text-[#E0E0E0] mb-2">Nazwa drużyny</label>
                                 <input
                                     type="text"
-                                    id="team"
-                                    name="team"
+                                    id="cs-team"
+                                    name="cs-team"
+                                    value={formData['cs-team'] || ''}
+                                    onChange={handleInputChange}
                                     className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                 />
                             </div>
@@ -113,41 +211,51 @@ export default function RegisterPage() {
                                 <div className="space-y-2">
                                     <input
                                         type="text"
-                                        id="team-member-1"
-                                        name="team-member-1"
+                                        id="cs-member-1"
+                                        name="cs-member-1"
                                         placeholder="Nickname członka 1"
+                                        value={formData['cs-member-1'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
                                     <input
                                         type="text"
-                                        id="team-member-2"
-                                        name="team-member-2"
+                                        id="cs-member-2"
+                                        name="cs-member-2"
                                         placeholder="Nickname członka 2"
+                                        value={formData['cs-member-2'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
                                     <input
                                         type="text"
-                                        id="team-member-3"
-                                        name="team-member-3"
+                                        id="cs-member-3"
+                                        name="cs-member-3"
                                         placeholder="Nickname członka 3"
+                                        value={formData['cs-member-3'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
                                     <input
                                         type="text"
-                                        id="team-member-4"
-                                        name="team-member-4"
+                                        id="cs-member-4"
+                                        name="cs-member-4"
                                         placeholder="Nickname członka 4"
+                                        value={formData['cs-member-4'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
                                     <input
                                         type="text"
-                                        id="team-member-5"
-                                        name="team-member-5"
+                                        id="cs-member-5"
+                                        name="cs-member-5"
                                         placeholder="Nickname członka 5"
+                                        value={formData['cs-member-5'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -157,7 +265,7 @@ export default function RegisterPage() {
                     )}
 
                     {/* League of Legends specific fields */}
-                    {selectedGame === 'game-lol' && (
+                    {selectedGame === '2' && (
                         <>
                             <div className="mb-4">
                                 <label htmlFor="lol-team" className="block text-[#E0E0E0] mb-2">Nazwa drużyny</label>
@@ -165,6 +273,8 @@ export default function RegisterPage() {
                                     type="text"
                                     id="lol-team"
                                     name="lol-team"
+                                    value={formData['lol-team'] || ''}
+                                    onChange={handleInputChange}
                                     className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                     required
                                 />
@@ -176,7 +286,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lol-member-1"
                                         name="lol-member-1"
-                                        placeholder="Top"
+                                        placeholder="Nickname członka 1"
+                                        value={formData['lol-member-1'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -184,7 +296,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lol-member-2"
                                         name="lol-member-2"
-                                        placeholder="Jungle"
+                                        placeholder="Nickname członka 2"
+                                        value={formData['lol-member-2'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -192,7 +306,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lol-member-3"
                                         name="lol-member-3"
-                                        placeholder="Mid"
+                                        placeholder="Nickname członka 3"
+                                        value={formData['lol-member-3'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -200,7 +316,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lol-member-4"
                                         name="lol-member-4"
-                                        placeholder="ADC"
+                                        placeholder="Nickname członka 4"
+                                        value={formData['lol-member-4'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -208,7 +326,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lol-member-5"
                                         name="lol-member-5"
-                                        placeholder="Support"
+                                        placeholder="Nickname członka 5"
+                                        value={formData['lol-member-5'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -218,7 +338,7 @@ export default function RegisterPage() {
                     )}
 
                     {/* Rocket League specific fields */}
-                    {selectedGame === 'game-rl' && (
+                    {selectedGame === '3' && (
                         <>
                             <div className="mb-4">
                                 <label htmlFor="rl-team" className="block text-[#E0E0E0] mb-2">Nazwa drużyny</label>
@@ -226,6 +346,8 @@ export default function RegisterPage() {
                                     type="text"
                                     id="rl-team"
                                     name="rl-team"
+                                    value={formData['rl-team'] || ''}
+                                    onChange={handleInputChange}
                                     className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                     required
                                 />
@@ -238,6 +360,8 @@ export default function RegisterPage() {
                                         id="rl-member-1"
                                         name="rl-member-1"
                                         placeholder="Nickname członka 1"
+                                        value={formData['rl-member-1'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -246,6 +370,8 @@ export default function RegisterPage() {
                                         id="rl-member-2"
                                         name="rl-member-2"
                                         placeholder="Nickname członka 2"
+                                        value={formData['rl-member-2'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -254,6 +380,8 @@ export default function RegisterPage() {
                                         id="rl-member-3"
                                         name="rl-member-3"
                                         placeholder="Nickname członka 3"
+                                        value={formData['rl-member-3'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -263,7 +391,7 @@ export default function RegisterPage() {
                     )}
 
                     {/* Fortnite specific fields */}
-                    {selectedGame === 'game-ft' && (
+                    {selectedGame === '4' && (
                         <>
                             <div className="mb-4">
                                 <label htmlFor="ft-team" className="block text-[#E0E0E0] mb-2">Nazwa drużyny</label>
@@ -271,6 +399,8 @@ export default function RegisterPage() {
                                     type="text"
                                     id="ft-team"
                                     name="ft-team"
+                                    value={formData['ft-team'] || ''}
+                                    onChange={handleInputChange}
                                     className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                     required
                                 />
@@ -283,6 +413,8 @@ export default function RegisterPage() {
                                         id="ft-member-1"
                                         name="ft-member-1"
                                         placeholder="Nickname członka 1"
+                                        value={formData['ft-member-1'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -291,6 +423,8 @@ export default function RegisterPage() {
                                         id="ft-member-2"
                                         name="ft-member-2"
                                         placeholder="Nickname członka 2"
+                                        value={formData['ft-member-2'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -299,6 +433,8 @@ export default function RegisterPage() {
                                         id="ft-member-3"
                                         name="ft-member-3"
                                         placeholder="Nickname członka 3"
+                                        value={formData['ft-member-3'] || ''}
+                                        onChange={handleInputChange}
                                         className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                         required
                                     />
@@ -308,7 +444,7 @@ export default function RegisterPage() {
                     )}
 
                     {/* Mortal Kombat specific fields */}
-                    {selectedGame === 'game-mk1' && (
+                    {selectedGame === '5' && (
                         <>
                             <div className="mb-4">
                                 <label htmlFor="mk-nickname" className="block text-[#E0E0E0] mb-2">Nickname</label>
@@ -316,25 +452,11 @@ export default function RegisterPage() {
                                     type="text"
                                     id="mk-nickname"
                                     name="mk-nickname"
+                                    value={formData['mk-nickname'] || ''}
+                                    onChange={handleInputChange}
                                     className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
                                     required
                                 />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="mk-character" className="block text-[#E0E0E0] mb-2">Ulubiona
-                                    postać</label>
-                                <select
-                                    id="mk-character"
-                                    name="mk-character"
-                                    className="w-full p-2 bg-[#1E1E1E] border border-[#2A2A2A] rounded text-[#E0E0E0] focus:outline-none focus:border-[#30E9EE]"
-                                >
-                                    <option value="">Wybierz postać</option>
-                                    <option value="scorpion">Scorpion</option>
-                                    <option value="sub-zero">Sub-Zero</option>
-                                    <option value="raiden">Raiden</option>
-                                    <option value="kitana">Kitana</option>
-                                    <option value="liu-kang">Liu Kang</option>
-                                </select>
                             </div>
                         </>
                     )}

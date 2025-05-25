@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const cors = require('cors')
+const {registerTeam} = require('./teamService');
+
 
 // Port setting: Hosting || default local
 const port = process.env.PORT || 5000;
@@ -28,6 +30,17 @@ app.use((req, res, next) => {
 app.get('/*splat', (_req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
+
+// Endpoint to register a team
+app.post('/api/register', async (req, res) => {
+    try {
+        const teamId = await registerTeam(req.body);
+        res.status(201).json({message: 'Drużyna zarejestrowana', teamId});
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);

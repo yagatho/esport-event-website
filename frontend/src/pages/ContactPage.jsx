@@ -4,7 +4,7 @@ export default function HomePage() {
   return (
     <div className="bg-[#121212] min-h-screen w-full px-6 py-10 md:p-10">
       <h1 className="text-4xl md:text-8xl text-[#ecf0f1] mb-10 font-extrabold max-w-7xl">
-        Kontakt
+        KONTAKT
       </h1>
 
       <p className="text-[#95a5a6] text-xl md:text-2xl font-light mb-10 max-w-4xl">
