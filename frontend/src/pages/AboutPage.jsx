@@ -23,7 +23,7 @@ export default function HomePage() {
     <div className="bg-[#121212] min-h-screen w-full px-6 py-10 md:p-10 text-[#ecf0f1]">
       {/* Nagłówek */}
       <h1 className="text-4xl md:text-8xl font-extrabold mb-8 text-center">
-        O nas
+        O NAS
       </h1>
 
       {/* Sekcja Misja */}
