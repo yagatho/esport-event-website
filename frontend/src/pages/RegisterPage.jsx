@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+// TODO: Add error handling from backend
+
 export default function RegisterPage() {
     const [selectedGame, setSelectedGame] = useState('');
     const [formData, setFormData] = useState({});
