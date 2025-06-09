@@ -66,7 +66,7 @@ export default function RegisterPage() {
                 }
                 break;
             default:
-                // Walidacja dla nazw drużyn i członków
+                // team name and members validation
                 if (name.includes('-team') && (!value || value.trim().length < 3)) {
                     error = 'Nazwa drużyny musi mieć co najmniej 3 znaki';
                     name = 'teamName';
@@ -97,7 +97,7 @@ export default function RegisterPage() {
     const validateAllFields = () => {
         const errors = {};
 
-        // Walidacja podstawowych pól
+        // Validate basic fields
         if (!formData.name || formData.name.trim().length < 2) {
             errors.name = 'Imię i nazwisko musi mieć co najmniej 2 znaki';
         }
@@ -110,7 +110,7 @@ export default function RegisterPage() {
             errors.phone = 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)';
         }
 
-        // Walidacja dla nazwy drużyny i członków w zależności od wybranej gry
+        // Validate for specific game
         if (selectedGame) {
             const prefix = selectedGame === '1' ? 'cs' :
                 selectedGame === '2' ? 'lol' :
@@ -272,7 +272,7 @@ export default function RegisterPage() {
                     break;
             }
 
-            // Sprawdzenie czy liczba członków drużyny jest odpowiednia
+            // Check if number of members matches the required team size
             const requiredPlayers = getTeamSize(selectedGame);
             if (selectedGame !== '5' && members.length !== requiredPlayers) {
                 throw new Error(`Niepoprawna liczba członków drużyny. W tej grze wymagana jest liczba ${requiredPlayers}.`);
@@ -474,7 +474,7 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-                {/* Extended information (unchanged) */}
+                {/* Extended information*/}
                 <div className="lg:w-1/2 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
