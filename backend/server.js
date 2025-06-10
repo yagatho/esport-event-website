@@ -2,16 +2,17 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const cors = require('cors')
-const { registerTeam } = require('./services/teamService');
-const { uploadTeamPhoto } = require('./upload');
-const { saveContactForm } = require('./services/contactService');
+const {registerTeam} = require('./services/teamService');
+const {uploadTeamPhoto} = require('./upload');
+const {saveContactForm} = require('./services/contactService');
+const {getAllTeams} = require('./services/getAllTeams');
 
 // Port setting: Hosting || default local
 const port = process.env.PORT || 5000;
 
 // Middleware for JSON parsing
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 // Setting CORS: for development only
 app.use(cors({
@@ -55,6 +56,17 @@ app.post('/api/contact', async (req, res) => {
         res.status(200).json({message: 'Formularz kontaktowy został wysłany', contactId});
     } catch (error) {
         res.status(400).json({error: error.message});
+    }
+});
+
+// Endpoint to get all teams
+app.get('/api/teams', async (req, res) => {
+    try {
+        const teams = await getAllTeams();
+        return res.status(200).json(teams);
+    } catch (error) {
+        // console.error('Błąd podczas pobierania drużyn:', error);
+        return res.status(500).json({error: 'Nie udało się pobrać drużyn'});
     }
 });
 
