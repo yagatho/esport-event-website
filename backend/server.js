@@ -2,9 +2,9 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const cors = require('cors')
-const { registerTeam } = require('./teamService');
+const { registerTeam } = require('./services/teamService');
 const { uploadTeamPhoto } = require('./upload');
-const { saveContactForm } = require('./contactService');
+const { saveContactForm } = require('./services/contactService');
 
 // Port setting: Hosting || default local
 const port = process.env.PORT || 5000;

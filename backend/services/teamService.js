@@ -1,4 +1,4 @@
-const pool = require('./db');
+const pool = require('../db');
 
 // Regex do walidacji
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
