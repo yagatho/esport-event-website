@@ -5,7 +5,7 @@
 <h2>🌐 Live Demo</h2>
 
 You can try the live version of the project here:  
-👉 <a href="https://your-render-url.onrender.com" target="_blank">https://your-render-url.onrender.com</a>
+👉 <a href="https://esport-event-website.onrender.com" target="_blank">https://esport-event-website.onrender.com</a>
 
 <h2>🧐 Features</h2>
 
