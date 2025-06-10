@@ -49,18 +49,15 @@ export default function Menu() {
               className="inline-flex items-center transform transition duration-300 ease-out hover:scale-115 hover:rotate-15"
             >
               <img src={Logo} alt="Logo" className="h-24 object-cover" />
-              <span className="ml-3 text-[#ecf0f1] text-lg font-semibold transition-colors duration-300 hover:text-[#c0392b]">
-                HOME
-              </span>
             </a>
 
             {/* Desktop menu */}
             <div className="hidden md:flex">
-                <a href="/about" className="px-9 py-3 text-[#E0E0E0] hover:text-[#c0392b] transition-colors">O nas</a>
-                <a href="/games" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Gry</a>
-                <a href="/faq" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">FAQ</a>
-                <a href="/contact" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Kontakt</a>
-                <a href="/register" className="ml-7 bg-[#c0392b] text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white">ZAPISZ SIĘ</a>
+                <a href="/about" className="text-lg px-9 py-3 text-[#E0E0E0] hover:text-[#c0392b] transition-colors">O nas</a>
+                <a href="/games" className="text-lg px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Gry</a>
+                <a href="/faq" className="text-lg px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">FAQ</a>
+                <a href="/contact" className="text-lg px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Kontakt</a>
+                <a href="/register" className="text-lg ml-7 bg-[#c0392b] text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white">ZAPISZ SIĘ</a>
             </div>
             {/* Hamburger */}
             <button
@@ -76,11 +73,11 @@ export default function Menu() {
 
             {/* Dropdown mobile menu */}
             {visible && (<div ref={menuRef} className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[95%] bg-[#232323] border-[#2A2A2A] border-3 rounded shadow-lg flex flex-col items-center md:hidden z-50 divide-y divide-[#2A2A2A] ${isClosing ? 'animate-[slideUp_0.3s_ease-in]' : 'animate-[slideDown_0.3s_ease-out]'}`}>
-                <a href="/about" className="w-[80%] px-4 py-3 mt-2 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>O nas</a>
-                <a href="/games" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
-                <a href="/faq" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
-                <a href="/contact" className="w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Kontakt</a>
-                <a href="/register" className="bg-[#c0392b]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
+                <a href="/about" className="text-lg w-[80%] px-4 py-3 mt-2 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>O nas</a>
+                <a href="/games" className="text-lg w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Gry</a>
+                <a href="/faq" className="text-lg w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>FAQ</a>
+                <a href="/contact" className="text-lg w-[80%] px-4 py-3 text-[#E0E0E0] text-center" onClick={() => setOpen(false)}>Kontakt</a>
+                <a href="/register" className="text-lg bg-[#c0392b]  text-[#E0E0E0] py-3 px-6 mb-3 mt-3 rounded-md tracking-wide" onClick={() => setOpen(false)}>ZAPISZ SIĘ</a>
             </div>)}
         </div>
     </nav>);
