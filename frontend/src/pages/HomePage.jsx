@@ -90,7 +90,7 @@ export default function HomePage() {
           </div>
           <a
             href="/faq"
-            className="bg-[#c0392b] hover:bg-[#2980b9] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide inline-block mt-10"
+            className="bg-[#c0392b] tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white text-[#E0E0E0] py-3 px-6 rounded-md inline-block mt-10"
           >
             Najczęściej zadawane pytania
           </a>
@@ -154,7 +154,7 @@ export default function HomePage() {
         <div className="flex justify-center mt-12">
           <a
             href="/contact"
-            className="bg-[#c0392b] hover:bg-[#2980b9] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide inline-block"
+            className="bg-[#c0392b] tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white text-[#E0E0E0] py-3 px-6 rounded-md inline-block"
           >
             Zostań Partnerem
           </a>
@@ -201,7 +201,7 @@ export default function HomePage() {
           <a
             id="signup"
             href="/register"
-            className="bg-[#c0392b] hover:bg-[#2980b9] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide inline-block"
+            className="bg-[#c0392b] tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white text-[#E0E0E0] py-3 px-6 rounded-md inline-block"
           >
             ZAPISZ SIĘ JUŻ DZIŚ
           </a>
