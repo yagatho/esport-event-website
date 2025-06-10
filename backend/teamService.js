@@ -94,7 +94,7 @@ async function registerTeam(body, file) {
                 teamName.trim(),
                 gameId,
                 leaderId,
-                teamPhoto ? `/uploads/teams/${teamPhoto.filename}` : null
+                teamPhoto ? `/uploads/teams/${teamPhoto.filename}` : `/uploads/teams/default.png`
             ]
         );
         const teamId = teamResult.rows[0].id;
