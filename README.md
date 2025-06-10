@@ -2,7 +2,10 @@
 
 <p id="description">"Łódzkie Grające" is the first official Esports Championship of the Łódź Voivodeship aimed at identifying the best players and teams in the region. The tournament brings together esports enthusiasts promotes healthy competition and strengthens the local gaming community.</p>
 
+<h2>🌐 Live Demo</h2>
 
+You can try the live version of the project here:  
+👉 <a href="https://your-render-url.onrender.com" target="_blank">https://your-render-url.onrender.com</a>
 
 <h2>🧐 Features</h2>
 
