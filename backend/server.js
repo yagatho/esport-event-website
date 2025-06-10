@@ -30,21 +30,20 @@ app.use((req, res, next) => {
 
 // Endpoint to register a team
 app.post('/api/register', uploadTeamPhoto, async (req, res) => {
-    if (req.file) {
-        console.log('Plik zapisany lokalnie pod ścieżką:', req.file.path); // pełna ścieżka do pliku
-        console.log('Nazwa pliku:', req.file.filename); // tylko nazwa pliku
-    } else {
-        console.log('Brak pliku do zapisu.');
-    }
+    // if (req.file) {
+    //     console.log('Plik zapisany lokalnie pod ścieżką:', req.file.path); // pełna ścieżka do pliku
+    //     console.log('Nazwa pliku:', req.file.filename); // tylko nazwa pliku
+    // } else {
+    //     console.log('Brak pliku do zapisu.');
+    // }
 
     try {
         const result = await registerTeam(req.body, req.file);
         res.status(201).json(result);
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
-            success: false,
-            message: error.message
+            error: error.message
         });
     }
 });
