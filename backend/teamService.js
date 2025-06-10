@@ -4,11 +4,18 @@ const pool = require('./db');
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^(?:\+\d{1,3})?[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{3}$/;
 
-async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPhone, members}) {
+async function registerTeam(body, file) {
     const client = await pool.connect();
 
     try {
-        // Walidacja danych wejściowych
+        const { teamName, gameId, leaderName, leaderEmail, leaderPhone, members } = body;
+        const teamPhoto = file;
+
+        const membersArray = Array.isArray(members)
+            ? members
+            : members.split(',').map(m => m.trim());
+
+        // Input validation
         if (!teamName || typeof teamName !== 'string' || teamName.trim().length < 3) {
             throw new Error('Nazwa drużyny musi mieć co najmniej 3 znaki');
         }
@@ -29,17 +36,11 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
             throw new Error('Podaj poprawny numer telefonu kapitana (format: XXX XXX XXX)');
         }
 
-        if (!Array.isArray(members)) {
+        if (!membersArray || membersArray.length === 0) {
             throw new Error('Lista członków drużyny jest niepoprawna');
         }
 
-        for (const member of members) {
-            if (!member || typeof member !== 'string' || member.trim().length < 2) {
-                throw new Error('Imię i nazwisko każdego członka drużyny musi mieć co najmniej 2 znaki');
-            }
-        }
-
-        // Check if the game exists and get the required number of players
+        // Check game and required players
         const gameResult = await client.query('SELECT players_per_team FROM games WHERE id = $1', [gameId]);
         if (gameResult.rows.length === 0) {
             throw new Error('Nieznana gra');
@@ -47,13 +48,13 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
 
         const requiredPlayers = gameResult.rows[0].players_per_team;
 
-        if (members.length !== requiredPlayers) {
+        if (membersArray.length !== requiredPlayers) {
             throw new Error(`Niepoprawna liczba członków drużyny. W tej grze wymagana jest liczba ${requiredPlayers}.`);
         }
 
         await client.query('BEGIN');
 
-        // Check team name uniqueness
+        // Check uniqueness of team name
         const existingTeam = await client.query(
             'SELECT id FROM teams WHERE name = $1',
             [teamName.trim()]
@@ -63,7 +64,7 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
             throw new Error('Drużyna o takiej nazwie już istnieje');
         }
 
-        // Check if leader email already exists in the same game
+        // Check if leader already exist in specific game
         const existingLeaderInGame = await client.query(
             `SELECT l.id
              FROM leaders l
@@ -77,7 +78,7 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
             throw new Error('Kapitan o podanym adresie email jest już zarejestrowany w tym turnieju');
         }
 
-        // Add leader
+        // Dodanie kapitana
         const leaderResult = await client.query(
             `INSERT INTO leaders (name, email, phone)
              VALUES ($1, $2, $3) RETURNING id`,
@@ -87,14 +88,19 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
 
         // Add team
         const teamResult = await client.query(
-            `INSERT INTO teams (name, game_id, leader_id)
-             VALUES ($1, $2, $3) RETURNING id`,
-            [teamName.trim(), gameId, leaderId]
+            `INSERT INTO teams (name, game_id, leader_id, photo_path)
+             VALUES ($1, $2, $3, $4) RETURNING id`,
+            [
+                teamName.trim(),
+                gameId,
+                leaderId,
+                teamPhoto ? `/uploads/teams/${teamPhoto.filename}` : `/uploads/teams/default.png`
+            ]
         );
         const teamId = teamResult.rows[0].id;
 
-        // Add team members
-        for (const memberName of members) {
+        // Adding team members
+        for (const memberName of membersArray) {
             await client.query(
                 `INSERT INTO team_members (team_id, member_name)
                  VALUES ($1, $2)`,
@@ -104,15 +110,31 @@ async function registerTeam({teamName, gameId, leaderName, leaderEmail, leaderPh
 
         await client.query('COMMIT');
 
-        return teamId;
+        return {
+            success: true,
+            message: 'Drużyna została zarejestrowana pomyślnie',
+            teamId: teamId,
+            photoPath: teamPhoto ? `/uploads/teams/${teamPhoto.filename}` : null
+        };
 
     } catch (error) {
         await client.query('ROLLBACK');
-        throw error;
 
+        // Delete file if needed
+        if (file) {
+            const fs = require('fs');
+            const filePath = file.path;
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('Błąd podczas usuwania pliku:', err);
+            });
+        }
+
+        throw new Error(error.message); // throw so caller can handle it
     } finally {
         client.release();
     }
 }
 
-module.exports = {registerTeam};
+module.exports = {
+    registerTeam
+};

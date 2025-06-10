@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+// TODO: Add error handling from backend.
+
 export default function RegisterPage() {
     const [selectedGame, setSelectedGame] = useState('');
     const [formData, setFormData] = useState({});
@@ -13,6 +15,8 @@ export default function RegisterPage() {
         teamName: '',
         members: '',
     });
+    const [teamPhoto, setTeamPhoto] = useState(null);
+    const [logoPreview, setLogoPreview] = useState(null);
 
     // Email regex: Basic validation for email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,6 +37,9 @@ export default function RegisterPage() {
             teamName: '',
             members: ''
         }));
+        // Reset logo when game changes
+        setTeamPhoto(null);
+        setLogoPreview(null);
     };
 
     const handleInputChange = (e) => {
@@ -44,6 +51,44 @@ export default function RegisterPage() {
 
         // Real-time validation
         validateField(name, value);
+    };
+
+    const handleLogoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type and size
+            const validTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 3 * 1024 * 1024; // 3MB
+
+            if (!validTypes.includes(file.type)) {
+                setFieldErrors(prev => ({
+                    ...prev,
+                    teamLogo: 'Dozwolone formaty: JPG, PNG'
+                }));
+                return;
+            }
+
+            if (file.size > maxSize) {
+                setFieldErrors(prev => ({
+                    ...prev,
+                    teamLogo: 'Maksymalny rozmiar pliku to 3MB'
+                }));
+                return;
+            }
+
+            setTeamPhoto(file);
+            setFieldErrors(prev => ({
+                ...prev,
+                teamLogo: ''
+            }));
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const validateField = (name, value) => {
@@ -66,7 +111,7 @@ export default function RegisterPage() {
                 }
                 break;
             default:
-                // Walidacja dla nazw drużyn i członków
+                // team name and members validation
                 if (name.includes('-team') && (!value || value.trim().length < 3)) {
                     error = 'Nazwa drużyny musi mieć co najmniej 3 znaki';
                     name = 'teamName';
@@ -97,7 +142,7 @@ export default function RegisterPage() {
     const validateAllFields = () => {
         const errors = {};
 
-        // Walidacja podstawowych pól
+        // Validate basic fields
         if (!formData.name || formData.name.trim().length < 2) {
             errors.name = 'Imię i nazwisko musi mieć co najmniej 2 znaki';
         }
@@ -110,7 +155,7 @@ export default function RegisterPage() {
             errors.phone = 'Podaj poprawny numer telefonu (np. 123 456 789 lub +48 123 456 789)';
         }
 
-        // Walidacja dla nazwy drużyny i członków w zależności od wybranej gry
+        // Validate for specific game
         if (selectedGame) {
             const prefix = selectedGame === '1' ? 'cs' :
                 selectedGame === '2' ? 'lol' :
@@ -143,7 +188,6 @@ export default function RegisterPage() {
         return Object.keys(errors).length === 0;
     };
 
-    // Validation function to check if all required fields are filled and valid
     const isFormValid = () => {
         // Basic fields validation
         const hasBasicFields = formData.name &&
@@ -272,27 +316,31 @@ export default function RegisterPage() {
                     break;
             }
 
-            // Sprawdzenie czy liczba członków drużyny jest odpowiednia
+            // Check if number of members matches the required team size
             const requiredPlayers = getTeamSize(selectedGame);
             if (selectedGame !== '5' && members.length !== requiredPlayers) {
                 throw new Error(`Niepoprawna liczba członków drużyny. W tej grze wymagana jest liczba ${requiredPlayers}.`);
             }
 
-            const payload = {
-                teamName: teamName.trim(),
-                gameId: parseInt(selectedGame),
-                leaderName: formData['name'].trim(),
-                leaderEmail: formData['email'].trim(),
-                leaderPhone: formData['phone'].trim(),
-                members: members.map(member => member.trim()),
-            };
+            // Prepare form data for file upload
+            const formDataToSend = new FormData();
+            formDataToSend.append('teamName', teamName.trim());
+            formDataToSend.append('gameId', selectedGame);
+            formDataToSend.append('leaderName', formData['name'].trim());
+            formDataToSend.append('leaderEmail', formData['email'].trim());
+            formDataToSend.append('leaderPhone', formData['phone'].trim());
+
+            // Add members as array
+            formDataToSend.append('members', members.join(','));
+
+            // Add team logo if exists
+            if (teamPhoto) {
+                formDataToSend.append('teamPhoto', teamPhoto);
+            }
 
             const response = await fetch('/api/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
+                body: formDataToSend,
             });
 
             const result = await response.json();
@@ -304,7 +352,9 @@ export default function RegisterPage() {
             setSubmitStatus('success');
             setFormData({});
             setSelectedGame('');
-            setFieldErrors({name: '', email: '', phone: '', teamName: '', members: ''});
+            setTeamPhoto(null);
+            setLogoPreview(null);
+            setFieldErrors({name: '', email: '', phone: '', teamName: '', members: '', teamLogo: ''});
 
         } catch (error) {
             setSubmitStatus('error');
@@ -453,6 +503,51 @@ export default function RegisterPage() {
                                 </select>
                             </div>
 
+                            <div>
+                                <label className="block text-[#E0E0E0] mb-2 font-medium">
+                                    Logo drużyny/zawodnika
+                                </label>
+                                <div className="flex items-center gap-4">
+                                    <label className="cursor-pointer">
+                                        <div className="px-4 py-2 bg-[#2A2A2A] rounded-lg hover:bg-[#3A3A3A] transition-colors">
+                                            Wybierz plik
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="image/jpeg, image/png"
+                                            onChange={handleLogoChange}
+                                            className="hidden"
+                                            disabled={isSubmitting}
+                                        />
+                                    </label>
+                                    {logoPreview && (
+                                        <div className="relative">
+                                            <img
+                                                src={logoPreview}
+                                                alt="Podgląd loga"
+                                                className="w-12 h-12 object-cover rounded-lg"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setTeamPhoto(null);
+                                                    setLogoPreview(null);
+                                                }}
+                                                className="absolute -top-2 -right-2 bg-[#FF5555] text-white w-5 h-5 rounded-full flex items-center justify-center text-xs cursor-pointer"
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                <p className="text-[#95a5a6] text-xs mt-1">
+                                    Dozwolone formaty: JPG, PNG (max 3MB)
+                                </p>
+                                {fieldErrors.teamLogo && (
+                                    <p className="text-[#FF5555] text-sm mt-1">{fieldErrors.teamLogo}</p>
+                                )}
+                            </div>
+
                             <div className="border-t border-[#2A2A2A] pt-6">
                                 <label className="flex items-start text-[#E0E0E0] cursor-pointer group">
                                     <input
@@ -474,7 +569,7 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-                {/* Extended information (unchanged) */}
+                {/* Extended information*/}
                 <div className="lg:w-1/2 flex flex-col flex-1">
                     <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#2A2A2A] flex flex-col flex-1">
                         <h3 className="text-2xl font-bold text-[#E0E0E0] mb-6 flex items-center gap-3">
@@ -546,7 +641,6 @@ export default function RegisterPage() {
                                                 disabled={isSubmitting}
                                             />
                                         </div>
-
                                         <div>
                                             <label className="block text-[#E0E0E0] mb-3 font-medium">
                                                 Nickname'y członków zespołu <span className="text-[#FF5555]">*</span>

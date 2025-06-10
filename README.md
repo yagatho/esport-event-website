@@ -31,13 +31,20 @@ cd backend && npm install && node server.js
 
 Technologies used in the project:
 
-*   React
-*   Vite
-*   Tailwind
-*   Fetch API
-*   Node.js
-*   Express
-*   PostgreSQL
+### Frontend
+- React
+- Vite
+- Tailwind
+- Fetch API
+
+### Backend
+- Node.js
+- Express
+- PostgreSQL
+- Multer (file upload handling)
+
+### Hosting / Deployment
+- Render
 
 <h2>🙍‍♂️ Authors:</h2>
 
