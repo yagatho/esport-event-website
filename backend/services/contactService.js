@@ -1,4 +1,4 @@
-const pool = require('./db');
+const pool = require('../db');
 
 // Email regex for server-side validation
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

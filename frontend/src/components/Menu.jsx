@@ -54,17 +54,14 @@ export default function Menu() {
               </span>
             </a>
 
-
-
             {/* Desktop menu */}
             <div className="hidden md:flex">
-                <a href="/about" className="px-9 py-3 text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">O nas</a>
-                <a href="/games" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">Gry</a>
-                <a href="/faq" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-all duration-200">FAQ</a>
-                <a href="/contact" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#30E9EE] hover:underline underline-offset-4 transition-colors duration-200">Kontakt</a>
-                <a href="/register" className="ml-7 bg-[#c0392b] hover:bg-[#2980b9] transition-colors duration-200 text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide">ZAPISZ SIĘ</a>
+                <a href="/about" className="px-9 py-3 text-[#E0E0E0] hover:text-[#c0392b] transition-colors">O nas</a>
+                <a href="/games" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Gry</a>
+                <a href="/faq" className="px-9 py-3 border-l-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">FAQ</a>
+                <a href="/contact" className="px-9 py-3 border-l-2 border-r-2 border-[#2A2A2A] text-[#E0E0E0] hover:text-[#c0392b] transition-colors">Kontakt</a>
+                <a href="/register" className="ml-7 bg-[#c0392b] text-[#E0E0E0] py-3 px-6 rounded-md tracking-wide transition duration-300 ease-in-out hover:bg-[#2980b9] hover:text-white">ZAPISZ SIĘ</a>
             </div>
-
             {/* Hamburger */}
             <button
                 ref={hamburgerRef}
